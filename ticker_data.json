@@ -1,0 +1,65 @@
+{
+  "last_updated": "2026-02-08 15:15:46",
+  "cards": [
+    {
+      "name": "Pikachu Grey Hat",
+      "price": 1500,
+      "change_pct": 2.5,
+      "trend": "up"
+    },
+    {
+      "name": "Charizard ex 199/165",
+      "price": 920,
+      "change_pct": -1.2,
+      "trend": "down"
+    },
+    {
+      "name": "Mew ex 232/91",
+      "price": 1575,
+      "change_pct": 0.5,
+      "trend": "up"
+    },
+    {
+      "name": "Umbreon ex 161/131",
+      "price": 3800,
+      "change_pct": 7.1,
+      "trend": "up"
+    },
+    {
+      "name": "Latias & Latios GX",
+      "price": 8400,
+      "change_pct": -1.8,
+      "trend": "down"
+    },
+    {
+      "name": "Umbreon Vmax 215/203",
+      "price": 2989,
+      "change_pct": -0.4,
+      "trend": "flat"
+    },
+    {
+      "name": "Gengar Vmax 271/264",
+      "price": 1675,
+      "change_pct": 1.5,
+      "trend": "up"
+    },
+    {
+      "name": "Giratina Vstar GG69",
+      "price": 400,
+      "change_pct": -1.3,
+      "trend": "down"
+    },
+    {
+      "name": "Lugia V AA 186/195",
+      "price": 795,
+      "change_pct": -1.2,
+      "trend": "down"
+    },
+    {
+      "name": "Mewtwo & Mew GX SM191",
+      "price": 796,
+      "change_pct": -0.5,
+      "trend": "flat"
+    }
+  ]
+}

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONYX VAULT - Pokemon Card Market Ticker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: #1a1a1a;
+            padding: 15px 20px;
+            border-bottom: 2px solid #00ff00;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ff00;
+            letter-spacing: 2px;
+        }
+
+        .tagline {
+            font-size: 12px;
+            color: #888;
+            font-style: italic;
+        }
+
+        .last-update {
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* Ticker Container */
+        .ticker-container {
+            height: calc(100vh - 60px);
+            overflow: hidden;
+            position: relative;
+            background: #0a0a0a;
+        }
+
+        /* Scrolling Ticker */
+        .ticker-wrap {
+            width: 100%;
+            overflow: hidden;
+            height: 80px;
+            background: #000;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+            position: relative;
+        }
+
+        .ticker {
+            display: flex;
+            animation: scroll 30s linear infinite;
+            width: max-content;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .ticker-item {
+            display: inline-flex;
+            align-items: center;
+            padding: 20px 40px;
+            white-space: nowrap;
+            border-right: 1px solid #333;
+            min-width: 300px;
+        }
+
+        .card-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            margin-right: 15px;
+        }
+
+        .card-price {
+            font-size: 18px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .price-up { color: #00ff00; }
+        .price-down { color: #ff0000; }
+        .price-flat { color: #ffaa00; }
+
+        .card-change {
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+
+        .change-up {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+
+        .change-down {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0000;
+        }
+
+        .change-flat {
+            background: rgba(255, 170, 0, 0.2);
+            color: #ffaa00;
+        }
+
+        /* Grid View (Main Display) */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+
+        .card-box {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .card-box:hover {
+            border-color: #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .trend-indicator {
+            font-size: 24px;
+        }
+
+        .price-display {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .change-display {
+            font-size: 14px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* Market Status Banner */
+        .market-status {
+            background: linear-gradient(90deg, #1a1a1a, #0a0a0a, #1a1a1a);
+            padding: 10px 20px;
+            text-align: center;
+            border-top: 1px solid #333;
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Loading animation */
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: #00ff00;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div>
+            <div class="logo">ONYX VAULT</div>
+            <div class="tagline">Analyze. Acquire. Profit.</div>
+        </div>
+        <div class="last-update" id="lastUpdate">Loading...</div>
+    </div>
+
+    <!-- Scrolling Ticker -->
+    <div class="ticker-wrap">
+        <div class="ticker" id="ticker">
+            <!-- Ticker items will be inserted here -->
+        </div>
+    </div>
+
+    <!-- Main Grid Display -->
+    <div class="ticker-container">
+        <div class="grid-container" id="gridContainer">
+            <div class="loading">Loading market data...</div>
+        </div>
+    </div>
+
+    <!-- Market Status -->
+    <div class="market-status">
+        Live Pokemon Card Market Data • Updated Every 60 Seconds • ONYX VAULT © 2026
+    </div>
+
+    <script>
+        // Configuration
+        const DATA_URL = 'ticker_data.json';  // Your JSON file path
+        const UPDATE_INTERVAL = 60000;  // Update every 60 seconds
+
+        // Fetch and display data
+        async function loadTickerData() {
+            try {
+                const response = await fetch(DATA_URL + '?t=' + Date.now()); // Cache bust
+                const data = await response.json();
+                
+                // Update last update time
+                document.getElementById('lastUpdate').textContent = 
+                    `Last Updated: ${data.last_updated}`;
+                
+                // Update scrolling ticker
+                updateScrollingTicker(data.cards);
+                
+                // Update grid display
+                updateGridDisplay(data.cards);
+                
+            } catch (error) {
+                console.error('Error loading ticker data:', error);
+                document.getElementById('lastUpdate').textContent = 'Error loading data';
+            }
+        }
+
+        // Update scrolling ticker
+        function updateScrollingTicker(cards) {
+            const ticker = document.getElementById('ticker');
+            
+            // Create ticker items (duplicate for seamless loop)
+            let tickerHTML = '';
+            const allCards = [...cards, ...cards]; // Duplicate for seamless scroll
+            
+            allCards.forEach(card => {
+                const trendClass = `price-${card.trend}`;
+                const changeClass = `change-${card.trend}`;
+                const sign = card.change_pct >= 0 ? '+' : '';
+                
+                tickerHTML += `
+                    <div class="ticker-item">
+                        <span class="card-name">${card.name}</span>
+                        <span class="card-price ${trendClass}">$${card.price.toLocaleString()}</span>
+                        <span class="card-change ${changeClass}">${sign}${card.change_pct}%</span>
+                    </div>
+                `;
+            });
+            
+            ticker.innerHTML = tickerHTML;
+        }
+
+        // Update grid display
+        function updateGridDisplay(cards) {
+            const container = document.getElementById('gridContainer');
+            
+            let gridHTML = '';
+            cards.forEach(card => {
+                const trendEmoji = card.trend === 'up' ? '📈' : 
+                                   card.trend === 'down' ? '📉' : '➡️';
+                const priceClass = `price-${card.trend}`;
+                const changeClass = `change-${card.trend}`;
+                const sign = card.change_pct >= 0 ? '+' : '';
+                
+                gridHTML += `
+                    <div class="card-box">
+                        <div class="card-header">
+                            <div class="card-title">${card.name}</div>
+                            <div class="trend-indicator">${trendEmoji}</div>
+                        </div>
+                        <div class="price-display ${priceClass}">
+                            $${card.price.toLocaleString()}
+                        </div>
+                        <div class="change-display ${changeClass}">
+                            ${sign}${card.change_pct}% (24h)
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = gridHTML;
+        }
+
+        // Initial load
+        loadTickerData();
+
+        // Auto-refresh every 60 seconds
+        setInterval(loadTickerData, UPDATE_INTERVAL);
+
+        // Manual refresh on click (anywhere on page)
+        document.addEventListener('click', () => {
+            loadTickerData();
+        });
+    </script>
+</body>
+</html>
