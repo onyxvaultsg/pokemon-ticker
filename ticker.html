@@ -229,7 +229,7 @@
     <!-- Scrolling Ticker -->
     <div class="ticker-wrap">
         <div class="ticker" id="ticker">
-            <!-- Ticker items will be inserted here -->
+            <!-- Ticker items here -->
         </div>
     </div>
 
@@ -247,7 +247,7 @@
 
     <script>
         // Configuration
-        const DATA_URL = 'ticker_data.json';  // Your JSON file path
+        const DATA_URL = 'ticker_data.json';  // JSON file path
         const UPDATE_INTERVAL = 60000;  // Update every 60 seconds
 
         // Fetch and display data
@@ -276,9 +276,9 @@
         function updateScrollingTicker(cards) {
             const ticker = document.getElementById('ticker');
             
-            // Create ticker items (duplicate for seamless loop)
+            // Create ticker items
             let tickerHTML = '';
-            const allCards = [...cards, ...cards]; // Duplicate for seamless scroll
+            const allCards = [...cards, ...cards]; // Duplicate seamless scroll
             
             allCards.forEach(card => {
                 const trendClass = `price-${card.trend}`;
@@ -334,7 +334,7 @@
         // Auto-refresh every 60 seconds
         setInterval(loadTickerData, UPDATE_INTERVAL);
 
-        // Manual refresh on click (anywhere on page)
+        // Manual refresh on click
         document.addEventListener('click', () => {
             loadTickerData();
         });
