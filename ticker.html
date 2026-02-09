@@ -46,7 +46,7 @@
             color: #666;
         }
 
-        /* Ticker Container */
+       
         .ticker-container {
             height: calc(100vh - 60px);
             overflow: hidden;
@@ -54,7 +54,7 @@
             background: #0a0a0a;
         }
 
-        /* Scrolling Ticker */
+        
         .ticker-wrap {
             width: 100%;
             overflow: hidden;
@@ -123,7 +123,7 @@
             color: #ffaa00;
         }
 
-        /* Grid View (Main Display) */
+      
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -177,7 +177,7 @@
             display: inline-block;
         }
 
-        /* Market Status Banner */
+       
         .market-status {
             background: linear-gradient(90deg, #1a1a1a, #0a0a0a, #1a1a1a);
             padding: 10px 20px;
@@ -187,7 +187,7 @@
             color: #666;
         }
 
-        /* Loading animation */
+        
         .loading {
             position: fixed;
             top: 50%;
@@ -197,7 +197,7 @@
             color: #00ff00;
         }
 
-        /* Scrollbar styling */
+        
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -242,28 +242,28 @@
 
     <!-- Market Status -->
     <div class="market-status">
-        Live Pokemon Card Market Data • Updated Every 60 Seconds • ONYX VAULT © 2026
+        Pokemon Card Market Data • ONYX VAULT © 2026
     </div>
 
     <script>
-        // Configuration
-        const DATA_URL = 'ticker_data.json';  // JSON file path
-        const UPDATE_INTERVAL = 60000;  // Update every 60 seconds
+        
+        const DATA_URL = 'ticker_data.json';  
+        const UPDATE_INTERVAL = 60000;  
 
-        // Fetch and display data
+        
         async function loadTickerData() {
             try {
                 const response = await fetch(DATA_URL + '?t=' + Date.now()); // Cache bust
                 const data = await response.json();
                 
-                // Update last update time
+                
                 document.getElementById('lastUpdate').textContent = 
                     `Last Updated: ${data.last_updated}`;
                 
-                // Update scrolling ticker
+                
                 updateScrollingTicker(data.cards);
                 
-                // Update grid display
+                
                 updateGridDisplay(data.cards);
                 
             } catch (error) {
@@ -272,13 +272,13 @@
             }
         }
 
-        // Update scrolling ticker
+        
         function updateScrollingTicker(cards) {
             const ticker = document.getElementById('ticker');
             
-            // Create ticker items
+            
             let tickerHTML = '';
-            const allCards = [...cards, ...cards]; // Duplicate seamless scroll
+            const allCards = [...cards, ...cards]; 
             
             allCards.forEach(card => {
                 const trendClass = `price-${card.trend}`;
@@ -297,7 +297,7 @@
             ticker.innerHTML = tickerHTML;
         }
 
-        // Update grid display
+        
         function updateGridDisplay(cards) {
             const container = document.getElementById('gridContainer');
             
@@ -328,13 +328,13 @@
             container.innerHTML = gridHTML;
         }
 
-        // Initial load
+       
         loadTickerData();
 
-        // Auto-refresh every 60 seconds
+        
         setInterval(loadTickerData, UPDATE_INTERVAL);
 
-        // Manual refresh on click
+        
         document.addEventListener('click', () => {
             loadTickerData();
         });
